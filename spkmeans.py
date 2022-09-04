@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import spkmeans_capi
 
+np.seterr(divide='ignore', invalid='ignore')
 
 np.random.seed(0)
 
@@ -49,7 +50,7 @@ def get_goal(goal, data_array, n, dim, k):
     res = 0
     if goal == "spk":
         T, k = spkmeans_capi.get_T(data_array, n, dim, k)
-        T = np.array(T).reshape(n,k)
+        T = np.array(T).reshape(n, k)
         k_means_pp(T, k)
     elif goal == "jacobi":
         eigen_values, eigen_vectors = spkmeans_capi.run_jacobi(data_array, n, dim)
@@ -79,15 +80,16 @@ def get_goal(goal, data_array, n, dim, k):
 def k_means_pp(points, k):
         n, dim = points.shape
         init_centroids = []
-        min_dis = np.inf
+        min_dis = None
         p = None
-        for j in range(k):  # initializing k centroids as in k-means++ initialization
-            curr = np.random.choice(n, p=p)  # picking a random index of points provided
+        print(k)
+        for j in range(k):
+        # initializing k centroids as in k-means++ initialization
+            curr = np.random.choice(n, None, True, p=p)  # picking a random index of points provided
             init_centroids.append(curr)
-            distances = np.power((points-points[curr]), 2).sum(axis=1)
-            min_dis = distances if min_dis is None else np.minimum(distances, min_dis)
-            p = np.divide(min_dis, min_dis.sum())
-            print('gony')
+            distances = ((points - points[curr]) ** 2).sum(axis=1)
+            min_dis = distances if min_dis is None else np.minimum(min_dis, distances)
+            p = min_dis / min_dis.sum()
         c_res = spkmeans_capi.fit(k, n, dim, points[init_centroids].tolist(), points.tolist())
         print(','.join([str(i) for i in init_centroids]))  # prints the indices of observations chosen by
         # the K-means++ algorithm as the initial centroids.
