@@ -667,12 +667,18 @@ double **create_T(Point *points, int dim, int n, int *k) {
     eigen_values = calloc(n, sizeof(double));
     Mem_Assertion(eigen_values != NULL);
     get_diag(matrix_L_norm, eigen_values, n);
+    printf("unsorted eigen matrix and values:\n");
+    print_Jacobi(eigen_vectors, eigen_values, n);
     eigen_arr = create_sorted_eigen_arr(eigen_vectors, eigen_values, n);
     if(*k == 0){
         *k = eigengap(eigen_arr, n);
     }
     U = create_U(eigen_arr, n, *k);
+    printf("U is :\n");
+    print_matrix(U,n,*k);
     normalize_U(U, n, *k);
+    printf("normalized U is: \n");
+    print_matrix(U,n,*k);
     printf("T is: \n");
     print_matrix(U, n, *k);
     free(eigen_values);
