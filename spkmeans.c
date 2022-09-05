@@ -673,6 +673,8 @@ double **create_T(Point *points, int dim, int n, int *k) {
     }
     U = create_U(eigen_arr, n, *k);
     normalize_U(U, n, *k);
+    printf("T is: \n");
+    print_matrix(U, n, *k);
     free(eigen_values);
     return U;
 }
