@@ -85,15 +85,15 @@ def k_means_pp(points, k):
         print(k)
         for j in range(k):
         # initializing k centroids as in k-means++ initialization
-            curr = np.random.choice(n, None, True, p=p)  # picking a random index of points provided
+            curr = np.random.choice(n, p=p)  # picking a random index of points provided
             init_centroids.append(curr)
             distances = ((points - points[curr]) ** 2).sum(axis=1)
-            min_dis = distances if min_dis is None else np.minimum(min_dis, distances)
+            min_dis = np.minimum(min_dis, distances)
             p = min_dis / min_dis.sum()
-        c_res = spkmeans_capi.fit(k, n, dim, points[init_centroids].tolist(), points.tolist())
+        res = spkmeans_capi.fit(k, n, dim, points[init_centroids].tolist(), points.tolist())
         print(','.join([str(i) for i in init_centroids]))  # prints the indices of observations chosen by
         # the K-means++ algorithm as the initial centroids.
-        print_list(c_res) # prints the final centroids from the K-means algorithm executed in c
+        print_list(res) # prints the final centroids from the K-means algorithm executed in c
 
 
 if __name__ == '__main__':
