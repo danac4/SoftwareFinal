@@ -81,7 +81,7 @@ def k_means_pp(points, k):
         n, dim = points.shape
         init_centroids = []
         min_dis = None
-        p = None
+        p = np.inf
         print(k)
         for j in range(k):
         # initializing k centroids as in k-means++ initialization
