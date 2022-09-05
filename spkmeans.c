@@ -353,7 +353,13 @@ void sort(EigenData eigen_arr[], int n) {
         }
     }
 }
-
+void test_print(EigenData eigen_arr[], int n){
+    int i;
+    for(i = 0; i<n;i++){
+        prinf("eigen_arr[%d]: val = %lf vector:\n",i,eigen_arr->val);
+        print_row(eigen_arr->vector, n);
+    }
+}
 /*
  * Given an n eigenvectors 2D array and a 1D array of n corresponding eigenvalues,
  * creates a new 1D EigenData (contains eigenvalue it's eigenvector) array
@@ -367,7 +373,11 @@ EigenData *create_sorted_eigen_arr(double **eigen_vectors, double *eigen_values,
         eigen_arr[i].val = eigen_values[i];
         eigen_arr[i].vector = eigen_vectors[i];
     }
+    printf("eigen data before sort:\n");
+    test_print(eigen_arr,n);
     sort(eigen_arr, n);
+    printf("eigen data before sort:\n");
+    test_print(eigen_arr,n);
     return eigen_arr;
 }
 
