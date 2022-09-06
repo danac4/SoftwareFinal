@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import spkmeans_capi
 
-np.seterr(divide='ignore', invalid='ignore')
+#np.seterr(divide='ignore', invalid='ignore')
 
 np.random.seed(0)
 
@@ -80,14 +80,14 @@ def get_goal(goal, data_array, n, dim, k):
 def k_means_pp(points, k):
         n, dim = points.shape
         init_centroids = []
-        min_dis = None
-        p = np.inf
+        min_dis = np.inf
+        p = None
         print(k)
         for j in range(k):
         # initializing k centroids as in k-means++ initialization
             curr = np.random.choice(n, p=p)  # picking a random index of points provided
             init_centroids.append(curr)
-            distances = ((points - points[curr]) ** 2).sum(axis=1)
+            distances = np.power((points - points[curr]), 2).sum(axis=1)
             min_dis = np.minimum(min_dis, distances)
             p = min_dis / min_dis.sum()
         res = spkmeans_capi.fit(k, n, dim, points[init_centroids].tolist(), points.tolist())
