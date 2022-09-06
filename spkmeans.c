@@ -356,8 +356,8 @@ void sort(EigenData eigen_arr[], int n) {
 void test_print(EigenData eigen_arr[], int n){
     int i;
     for(i = 0; i<n;i++){
-        printf("eigen_arr[%d]: val = %lf vector:\n",i,eigen_arr->val);
-        print_row(eigen_arr->vector, n);
+        printf("eigen_arr[%d]: val = %lf vector:\n",i,eigen_arr[i].val);
+        print_row(eigen_arr[i].vector, n);
     }
 }
 /*
