@@ -371,7 +371,7 @@ EigenData *create_sorted_eigen_arr(double **eigen_vectors, double *eigen_values,
     Mem_Assertion(eigen_arr != NULL);
     for(i = 0; i < n; i++){
         eigen_arr[i].val = eigen_values[i];
-        eigen_arr[i].vector = &eigen_vectors[i];
+        eigen_arr[i].vector = eigen_vectors[i];
     }
     printf("eigen data before sort:\n");
     test_print(eigen_arr,n);
