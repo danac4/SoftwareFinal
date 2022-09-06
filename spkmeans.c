@@ -366,12 +366,16 @@ void test_print(EigenData eigen_arr[], int n){
  * which is decreasingly ordered by eigenvalues and returns the new array.
  */
 EigenData *create_sorted_eigen_arr(double **eigen_vectors, double *eigen_values, int n) {
-    int i;
+    int i, j;
     EigenData* eigen_arr =(EigenData*)calloc(n, sizeof(EigenData));
     Mem_Assertion(eigen_arr != NULL);
     for(i = 0; i < n; i++){
         eigen_arr[i].val = eigen_values[i];
-        eigen_arr[i].vector = eigen_vectors[i];
+        eigen_arr[i].vector = (double*)calloc(n, sizeof(double));
+        Mem_Assertion(eigen_arr[i].vector != NULL);
+        for (j = 0;j < n;j++){
+            eigen_arr[i].vector[j] = eigen_vectors[j][i];
+        }
     }
     printf("eigen data before sort:\n");
     test_print(eigen_arr,n);
