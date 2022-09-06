@@ -82,7 +82,7 @@ def k_means_pp(points, k):
         init_centroids = []
         min_dis = np.inf
         p = None
-        print(k)
+        #print(k)
         for j in range(k):
         # initializing k centroids as in k-means++ initialization
             curr = np.random.choice(n, p=p)  # picking a random index of points provided
