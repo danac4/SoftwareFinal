@@ -34,28 +34,13 @@ void print_matrix(double **array, int n, int dim) {
         printf("%.4f\n", array[i][dim-1]);
     }
 }
-/* for test use
-void print_transpose(double **mat, int n, int dim){
-    int i,j;
-    for (j = 0; j<dim;j++){
-        for(i = 0; i<n; i++){
-            print_double(mat[i][j]);
-            if(i<n-1){
-                printf("%c",',');
-            }
-        }
-        printf("\n");
-    }
-}
- */
+
 /*
  * Prints the eigenvalues as the first line, second line onward is the corresponding eigenvectors
  */
 void print_Jacobi(double **eigen_vectors, double *eigen_values, int n) { 
-    print_row(eigen_values, n);
-    /*printf("\n");*/
+    print_row(eigen_values, n);    
     print_matrix(eigen_vectors, n, n);
-    /*print_transpose(eigen_vectors,n,n);*/
 }
 
 /*
@@ -106,11 +91,6 @@ void free_clusters(int k, Cluster* clusters) {
         free(clusters[j].centroid);
     }
     free(clusters);
-}
-
-void free_memory(int k, int n, Point* points, Cluster* clusters) {
-    free_data_points(n, points);
-    free_clusters(k, clusters);
 }
 
 /*
@@ -185,7 +165,7 @@ double sum_row(double **matrix, int row, int n) {
 
 /** JACOBI **/
 /*
- * Tranforms data structure from array of points to 2D matrix for design reasons 
+ * Data is converted from a 1D array to a 2D matrix 
  */
 void data_to_matrix(Point *points, double **matrix, int n, int dim) {
     int i, j;
@@ -230,7 +210,7 @@ int find_max_indices_off_diag(double **mat, int *i_val, int *j_val, int n) {
 }
 
 /*
- * Return the sign of given num
+ * Returns the sign of a given num
  */
 double sign(double num){
     if(num < 0){
@@ -251,7 +231,7 @@ int transform_matrix(double **mat, double **v, int n, int i, int j) {
     t = sign(theta)/(fabs(theta) + sqrt((theta * theta)+1.0));
     c = 1.0/(sqrt((t * t) + 1.0));
     s = t * c;
-    /*printf("theta= %lf t= %lf c= %lf s= %lf\n",theta,t,c,s);*/
+    
     for(r = 0; r < n; r++){
         if (r != i && r != j){
             tmp1 = mat[r][i]; /* Ari */
@@ -281,7 +261,7 @@ int transform_matrix(double **mat, double **v, int n, int i, int j) {
 
 /* 
  * Calculate sum of squares of all off-diagonal elements of given matrix
- * going through half of matrix elments due to symmetry
+ * going through half of matrix elements due to symmetry
  */
 double off_square(double **mat, int n) {
     int i, j;
@@ -304,7 +284,7 @@ double **jacobi(double **A, int n) {
 
     while (l < MAX_ITER_J) {
         find_max_indices_off_diag(A, &i, &j, n);
-        if (A[i][j] == 0){
+        if (A[i][j] == 0){ /* checks if A is a diagonal matrix */
             return V;
         }
         if(l==0){
@@ -314,7 +294,6 @@ double **jacobi(double **A, int n) {
         transform_matrix(A, V, n, i, j);
         off_A_prime = off_square(A, n);
         if((l != 0) && (off_A - off_A_prime <= EPSILON_J)) {
-            /*printf("off is:%lf\n",off_A-off_A_prime);*/
             return V;
         }
         off_A = off_A_prime;
@@ -352,15 +331,8 @@ void sort(EigenData eigen_arr[], int n) {
         }
     }
 }
-/*for test use
-void test_print(EigenData eigen_arr[], int n){
-    int i;
-    for(i = 0; i<n;i++){
-        printf("eigen_arr[%d]: val = %lf vector:\n",i,eigen_arr[i].val);
-        print_row(eigen_arr[i].vector, n);
-    }
-}
-*/
+
+
 /*
  * Given an n eigenvectors 2D array and a 1D array of n corresponding eigenvalues,
  * creates a new 1D EigenData (contains eigenvalue it's eigenvector) array
@@ -378,11 +350,8 @@ EigenData *create_sorted_eigen_arr(double **eigen_vectors, double *eigen_values,
             eigen_arr[i].vector[j] = eigen_vectors[j][i];
         }
     }
-    /*printf("eigen data before sort:\n");
-    test_print(eigen_arr,n);*/
+    
     sort(eigen_arr, n);
-    /*printf("eigen data before sort:\n");
-    test_print(eigen_arr,n);*/
     return eigen_arr;
 }
 
@@ -552,7 +521,7 @@ int clusters_update(Cluster* clusters, int k, int dim) {
 }
 
 /*
- * kmeans algorithem implementaion
+ * kmeans algorithm implementation
  * input: n, clusters = list of clusters, points = list of data points, dim = dimension, k
  */
 void kmeans(int n, Cluster* clusters, Point* points, int dim, int k) {
@@ -683,20 +652,12 @@ double **create_T(Point *points, int dim, int n, int *k) {
     eigen_values = calloc(n, sizeof(double));
     Mem_Assertion(eigen_values != NULL);
     get_diag(matrix_L_norm, eigen_values, n);
-    /*printf("unsorted eigen matrix and values:\n");
-    print_Jacobi(eigen_vectors, eigen_values, n);*/
     eigen_arr = create_sorted_eigen_arr(eigen_vectors, eigen_values, n);
     if(*k == 0){
         *k = eigengap(eigen_arr, n);
     }
     U = create_U(eigen_arr, n, *k);
-    /*printf("U is :\n");
-    print_matrix(U,n,*k);*/
     normalize_U(U, n, *k);
-    /*printf("normalized U is: \n");
-    print_matrix(U,n,*k);
-    printf("T is: \n");
-    print_matrix(U, n, *k);*/
     free(eigen_values);
     return U;
 }

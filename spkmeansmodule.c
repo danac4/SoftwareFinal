@@ -1,5 +1,5 @@
 #define PY_SSIZE_T_CLEAN
-#include "/usr/include/python3.10/Python.h"
+#include "Python.h"
 #include "spkmeans.h"
 
 
@@ -122,8 +122,13 @@ PyObject *arr_to_PyList(double *vectors, int n) {
     return PyList;
 }
 
+void free_memory(int k, int n, Point* points, Cluster* clusters) {
+    free_data_points(n, points);
+    free_clusters(k, clusters);
+}
+
 /*
- * Returns T, given k = 0 returns k aswell
+ * Returns T and updates k if k is zero in the given input
  */
 static PyObject *get_T(PyObject *self, PyObject *args){
     Point *points;
@@ -256,6 +261,7 @@ static PyObject *run_jacobi(PyObject *self, PyObject *args){
     if(!PyArg_ParseTuple(args, "Oii", &py_vectors, &n, &dim)){
         return NULL;
     }
+    
     vectors = matrix_init(n, dim);
     eigen_values = calloc(n, sizeof(double));
     if(!eigen_values) {
