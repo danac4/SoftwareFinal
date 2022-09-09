@@ -214,7 +214,9 @@ double **I_matrix(int n){
  */
 int find_max_indices_off_diag(double **mat, int *i_val, int *j_val, int n) {
     int i,j;
-    double max_val = 0.0;
+    double max_val = fabs(mat[0][1]);
+    *i_val = 0;
+    *j_val = 1;
     for(i = 0; i < n ; i++){
         for(j = i + 1; j < n; j++){
             if(fabs(mat[i][j]) > max_val){
@@ -295,24 +297,21 @@ double off_square(double **mat, int n) {
  * creates jacobi
  */
 double **jacobi(double **A, int n) {
-    /*printf("n = %d",n);*/
     double **V;
     double off_A = 0.0, off_A_prime;
     int i, j, l = 0;
     V = I_matrix(n); /* initializing V to Identity matrix */
-    /*printf("V start:\n");
-    print_matrix(V,n,n);*/
+
     while (l < MAX_ITER_J) {
+        find_max_indices_off_diag(A, &i, &j, n);
+        if (A[i][j] == 0){
+            return V;
+        }
         if(l==0){
             off_A = off_square(A, n);
         }
-        find_max_indices_off_diag(A, &i, &j, n);
-        /*printf("i is %d, j is %d \n",i,j);*/
+
         transform_matrix(A, V, n, i, j);
-        /*printf(" A after %d iteration is:\n",l);
-        print_matrix(A,n,5);
-        printf("V after %d iteration is:\n",l);
-        print_matrix(V,n,n);*/
         off_A_prime = off_square(A, n);
         if((l != 0) && (off_A - off_A_prime <= EPSILON_J)) {
             /*printf("off is:%lf\n",off_A-off_A_prime);*/
@@ -668,6 +667,7 @@ void create_Jacobi(Point *points, int dim, int n) {
     free(eigen_values);
     free_2D(eigen_vectors);
     free_2D(A);
+    
 }
 /*
  * This function is used only for "spk" goal from Python.

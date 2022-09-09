@@ -1,5 +1,5 @@
 #define PY_SSIZE_T_CLEAN
-#include <Python.h>
+#include "/usr/include/python3.10/Python.h"
 #include "spkmeans.h"
 
 
@@ -260,16 +260,17 @@ static PyObject *run_jacobi(PyObject *self, PyObject *args){
     eigen_values = calloc(n, sizeof(double));
     if(!eigen_values) {
         printf("An Error Has Occurred\n");
-        return NULL;
+        free_2D(vectors);
+        return PyErr_NoMemory();
     }
     pyList_to_matrix(py_vectors, vectors, dim, n);
     eigen_vectors = jacobi(vectors, n);
     py_vectors = matrix_to_PyList(eigen_vectors, n, n);
     get_diag(vectors, eigen_values, n);
     py_values = arr_to_PyList(eigen_values, n);
+    free_2D(vectors);;
     free(eigen_values);
     free_2D(eigen_vectors);
-    free_2D(vectors);
     py_tuple = Py_BuildValue("OO", py_values, py_vectors);
     Py_DECREF(py_values);
     Py_DECREF(py_vectors);

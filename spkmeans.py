@@ -54,7 +54,7 @@ def get_goal(goal, data_array, n, dim, k):
         k_means_pp(T, k)
     elif goal == "jacobi":
         eigen_values, eigen_vectors = spkmeans_capi.run_jacobi(data_array, n, dim)
-        eigen_vectors = np.array(eigen_vectors).reshape(n,n)
+        eigen_vectors = np.array(eigen_vectors).reshape(n, n)
         print_list([eigen_values])
         print_list(eigen_vectors)
     else:
