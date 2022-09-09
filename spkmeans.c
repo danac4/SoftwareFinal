@@ -792,5 +792,6 @@ int main(int argc, char *argv[]) {
     rewind(fp); 
     processFile(info, points, fp);
     get_goal(goal, points, dim, n);
+    free_data_points(n, points);
     return 0;
 }
