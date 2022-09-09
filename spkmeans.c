@@ -55,7 +55,6 @@ Point* allocate_mem(int dim, int n) {
     Mem_Assertion(points != NULL);
     for (i = 0; i < n; i++){
         v = (double*) calloc(dim,sizeof(double));
-        /*Mem_Assertion(v != NULL);*/
         if (!v){
             for (j = 0; j < i; j++){
                 free(points[j].vector);
@@ -284,7 +283,7 @@ double **jacobi(double **A, int n) {
 
     while (l < MAX_ITER_J) {
         find_max_indices_off_diag(A, &i, &j, n);
-        if (A[i][j] == 0){ /* checks if A is a diagonal matrix */
+        if (A[i][j] == 0.0){ /* checks if A is a diagonal matrix */
             return V;
         }
         if(l==0){
@@ -350,7 +349,6 @@ EigenData *create_sorted_eigen_arr(double **eigen_vectors, double *eigen_values,
             eigen_arr[i].vector[j] = eigen_vectors[j][i];
         }
     }
-    
     sort(eigen_arr, n);
     return eigen_arr;
 }

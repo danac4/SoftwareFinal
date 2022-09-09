@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import spkmeans_capi
 
-#np.seterr(divide='ignore', invalid='ignore')
 
 np.random.seed(0)
 
