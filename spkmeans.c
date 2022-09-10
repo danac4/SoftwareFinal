@@ -487,7 +487,7 @@ int centroid_update(Cluster* cluster, int dim, double *tmp_vector){
         tmp_vector[i] = cluster->newPoints[i]/cluster->count;
     }
     norm_check = euclidean_norm(cluster->centroid, dim) - euclidean_norm(tmp_vector, dim);
-    if (norm_check >= EPS || norm_check <= -EPS){ /*?*/
+    if (norm_check >= EPS || norm_check <= -EPS){
         has_changed = 0;
     }
     for (l = 0; l < dim; l++) {
