@@ -11,7 +11,7 @@ def print_list(lst):
     for row in lst:
             print(','.join('{:.4f}'.format(coord) for coord in row))
 
-
+# Checks arguments
 def prepare():
     assert len(sys.argv) == 4, 'Invalid Input!'
     k = validity_check_k()
@@ -19,13 +19,13 @@ def prepare():
     file = sys.argv[3]
     return k, goal, file
 
-
+# Checks if k is an integer
 def validity_check_k():
     assert sys.argv[1].isnumeric(), 'Invalid Input!'
     k = int(sys.argv[1])
     return k
 
-
+# Stores data points in numpy array
 def process_file(file, k):
     data = pd.read_csv(file, header=None)
     n = data.shape[0]
@@ -34,7 +34,7 @@ def process_file(file, k):
     assert k < n, 'Invalid Input!'
     return data_array, n, dim
 
-
+# Calls C function based on the given goal
 def get_goal(goal, data_array, n, dim, k):
     res = 0
     if goal == "spk":
