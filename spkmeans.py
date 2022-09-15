@@ -7,16 +7,6 @@ import spkmeans_capi
 np.random.seed(0)
 
 
-def double_to_str(num):
-    """
-    Print a double with 4 point persicion,
-    includes a fix for situations where -0.0000 is printed
-    """
-    if -0.00005 < num < 0:
-        num = 0.0
-    return f'{num:.4f}'
-
-
 def print_list(lst):
     for row in lst:
             print(','.join('{:.4f}'.format(coord) for coord in row))
